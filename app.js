@@ -25,7 +25,7 @@ app.use(bodyParser.json())
 app.use('/uploads/hrd', express.static('uploads/hrd'))
 app.use('/uploads/dosen', express.static('uploads/dosen'))
     // Connect to MongooDB
-const db_url = "mongodb+srv://andre:" + process.env.MONGOOSE_DB_PW + "@cluster0.oyggo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const db_url = "mongodb+srv://andre:" + "andre110102" + "@cluster0.oyggo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 mongoose.connect(db_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
