@@ -5,6 +5,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const cors = require('cors')
+require('dotenv').config()
     // const middlewareAuth = require('./api/middleware/check-api')
     // const apiKeyAuth = require('api-key-auth')
     // Call all router
@@ -25,7 +26,7 @@ app.use(bodyParser.json())
 app.use('/uploads/hrd', express.static('uploads/hrd'))
 app.use('/uploads/dosen', express.static('uploads/dosen'))
     // Connect to MongooDB
-const db_url = "mongodb+srv://andre:" + "andre110102" + "@cluster0.oyggo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+const db_url = "mongodb+srv://andre:" + process.env.MONGOOSE_DB_PW + "@cluster0.oyggo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 mongoose.connect(db_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
