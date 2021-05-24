@@ -12,7 +12,7 @@ exports.request_data_dosen = (req, res, next) => {
     let id_dosen = req.body.id_dosen
     let token = Math.random().toString(36).replace(/[^a-z]+/, '').substr(0, 5)
     let date = new Date((new Date()).getTime() + 43200000)
-    dataRequest.findOne({ email: email })
+    dataRequest.findOne({ email: email, dosen: id_dosen })
         .exec()
         .then(result => {
             if (result === null) {
