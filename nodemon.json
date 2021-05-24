@@ -1,0 +1,10 @@
+{
+    "env": {
+        "PORT": 3002,
+        "MONGOOSE_DB_PW": "andre110102",
+        "JWT_KEY": "secret",
+        "JWT_REFRESH": "ITDEL_JAYA_JAYA",
+        "EMAIL_USER": "panjaitanandree@gmail.com",
+        "EMAIL_PASS": "andre110102"
+    }
+}
