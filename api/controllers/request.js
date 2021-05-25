@@ -193,6 +193,8 @@ exports.doing_read_notif = (req, res, next) => {
 exports.get_request = (req, res, next) => {
     dataRequest.find({})
         .skip(Number(req.params.offset))
+        .limit(Number(req.params.limit))
+        .populate("dosen", "_id nama_lengkap nip")
         .exec()
         .then(result => {
             if (result.length) {
@@ -205,7 +207,11 @@ exports.get_request = (req, res, next) => {
                 })
             }
         })
-        .catch()
+        .catch(err => {
+            res.status(500).json({
+                msg: "Internal server error"
+            })
+        })
 }
 exports.get_all_notif = (req, res, next) => {
     notification.find({ isRead: { $nin: req.params.idUser } })
@@ -225,7 +231,7 @@ exports.get_all_notif = (req, res, next) => {
         })
         .catch(err => {
             res.status(500).json({
-                message: "Internal server Error"
+                msg: "Internal server error"
             })
         })
 }

@@ -31,8 +31,8 @@ mongoose.connect(db_url, {
     useUnifiedTopology: true,
 }).then(res => {
     console.log("connect succesfully")
-        // notifJabatan()
-        // notifPemangkatan()
+    notifJabatan()
+    notifPemangkatan()
 }).catch(err => {
     console.log("Can't connect to db")
 })
