@@ -1,6 +1,7 @@
 const e = require("express")
 const mongoose = require("mongoose")
 const transporter = require("../../config/nodemailer")
+const pusher = require("../../config/pusher")
 const dataRequest = require("../models/dataRequest")
 const dosens = require("../models/dosens")
 const notification = require("../models/notifications")
@@ -36,6 +37,9 @@ exports.request_data_dosen = (req, res, next) => {
                         })
                         new_notif.save()
                             .then(result => {
+                                pusher.trigger("my-channel", "req-token", {
+                                    message: "Request Notif"
+                                });
                                 res.status(200).json({
                                     message: "Success to request!"
                                 })
@@ -66,6 +70,9 @@ exports.request_data_dosen = (req, res, next) => {
                             })
                             new_notif.save()
                                 .then(result => {
+                                    pusher.trigger("my-channel", "req-token", {
+                                        message: "Request Notif"
+                                    });
                                     res.status(200).json({
                                         message: "Success to request!"
                                     })
@@ -183,8 +190,25 @@ exports.doing_read_notif = (req, res, next) => {
             })
         })
 }
+exports.get_request = (req, res, next) => {
+    dataRequest.find({})
+        .skip(Number(req.params.offset))
+        .exec()
+        .then(result => {
+            if (result.length) {
+                res.status(200).json({
+                    token: result
+                })
+            } else {
+                res.status(404).json({
+                    msg: "No data exist!"
+                })
+            }
+        })
+        .catch()
+}
 exports.get_all_notif = (req, res, next) => {
-    notification.find({})
+    notification.find({ isRead: { $nin: req.params.idUser } })
         .sort({ tanggal_notif: "DESC" })
         .skip(Number(req.params.offset))
         .exec()

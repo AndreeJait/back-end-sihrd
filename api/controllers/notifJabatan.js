@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const pusher = require("../../config/pusher")
 const dataJabatan = require("../models/dataJabatan")
 const notifications = require("../models/notifications")
 
@@ -17,6 +18,7 @@ const handleAction = () => {
                             .exec()
                             .then(result => {
                                 if (!result.length) {
+                                    console.log("Aneh")
                                     let new_notif = new notifications({
                                         _id: mongoose.Types.ObjectId(),
                                         content: content,
@@ -24,15 +26,20 @@ const handleAction = () => {
                                     })
                                     new_notif.save()
                                         .then(result => {
-                                            console.log("Notif dibuat")
+                                            console.log("Make notif")
+                                            pusher.trigger("my-channel", "req-token", {
+                                                message: "Request Notif"
+                                            });
                                         })
                                         .catch()
                                 }
+                                resolve(true)
                             })
-                            .catch()
+                            .catch(err => {
+                                resolve(true)
+                            })
                     })
                 }
-                resolve(true)
             })
             .catch(err => {
                 reject(false)
@@ -44,7 +51,7 @@ const handleRekursif = async() => {
     handleAction()
         .then(result => {
             if (result) {
-                handleRekursif()
+                setTimeout(handleRekursif(), 600000)
             }
         })
         .catch(err => {

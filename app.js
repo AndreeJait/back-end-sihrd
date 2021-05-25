@@ -15,8 +15,7 @@ const RequestRoute = require('./api/routes/request')
 const notifJabatan = require('./api/controllers/notifJabatan')
 const notifPemangkatan = require('./api/controllers/notifPemangkatan')
     // app.use(apiKeyAuth({ getSecret: middlewareAuth }))
-
-// use all library
+    // use all library
 app.use(cors())
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({
@@ -32,8 +31,8 @@ mongoose.connect(db_url, {
     useUnifiedTopology: true,
 }).then(res => {
     console.log("connect succesfully")
-    notifJabatan()
-    notifPemangkatan()
+        // notifJabatan()
+        // notifPemangkatan()
 }).catch(err => {
     console.log("Can't connect to db")
 })

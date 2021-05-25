@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const pusher = require("../../config/pusher")
 const dataPemangkatan = require("../models/dataPemangkatan")
 const notifications = require("../models/notifications")
 
@@ -26,9 +27,14 @@ const handleAction = () => {
                                     })
                                     new_notif.save()
                                         .then(result => {
-                                            console.log("Notif dibuat")
+                                            console.log("Make notif")
+                                            pusher.trigger("my-channel", "req-token", {
+                                                message: "Request Notif"
+                                            });
                                         })
-                                        .catch()
+                                        .catch(err => {
+                                            console.log(err)
+                                        })
                                 }
                             })
                             .catch()
@@ -47,7 +53,7 @@ const handleRekursif = async() => {
     handleAction()
         .then(result => {
             if (result) {
-                handleRekursif()
+                setTimeout(handleRekursif(), 60000)
             }
         })
         .catch(err => {
