@@ -124,14 +124,41 @@ exports.add_new_hrd = (req, res, next) => {
             }
         })
 }
+exports.make_profile_to_default = (req, res, next) => {
+    Users.findOneAndUpdate({ email: req.body.email }, { profile: "uploads\\hrd\\default_image_profile.jpg" })
+        .exec()
+        .then(result => {
+            if (result !== null) {
+                if (result.profile !== "uploads\\hrd\\default_image_profile.jpg") {
+                    unlinkAsync(result.profile)
+                }
+                res.status(200).json({
+                    message: "Success to update profile",
+                    profile: "uploads\\hrd\\default_image_profile.jpg"
+                })
+            } else {
+                res.status(404).json({
+                    message: "No users found!"
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "Internal server error !"
+            })
+        })
+}
 exports.update_profile_by_email = (req, res, next) => {
     Users.findOneAndUpdate({ email: req.body.email }, { profile: req.file.path })
         .exec()
         .then(result => {
             if (result !== null) {
-                unlinkAsync(result.profile)
+                if (result.profile !== "uploads\\hrd\\default_image_profile.jpg") {
+                    unlinkAsync(result.profile)
+                }
                 res.status(200).json({
-                    message: "Success to update profile"
+                    message: "Success to update profile",
+                    profile: req.file.path
                 })
             } else {
                 unlinkAsync(req.file.path)

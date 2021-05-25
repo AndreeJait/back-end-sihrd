@@ -36,5 +36,6 @@ router.delete('/:hrdId', checkAuth, usersController.delete_hrd_by_id)
 router.get('/:hrdId', checkAuth, usersController.get_hrd_by_id)
 router.post('/login', usersController.login_hrd)
 router.put('/update', checkAuth, usersController.update_users_by_email)
-router.put('/update/profile', upload.single('user_profile'), usersController.update_profile_by_email)
+router.put('/update/profile', checkAuth, upload.single('user_profile'), usersController.update_profile_by_email)
+router.put('/update/profile/default', checkAuth, usersController.make_profile_to_default)
 module.exports = router
