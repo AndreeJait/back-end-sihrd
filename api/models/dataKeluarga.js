@@ -8,6 +8,7 @@ const dataKeluargaSchema = mongoose.Schema({
     nik_pasangan: { type: String, require: true, default: null },
     no_kartu_keluarga: { type: String, require: true, default: null },
     tanggal_lahir_pasangan: { type: String, require: true, default: null },
+    agama_pasangan: { type: String, require: true, default: null },
     tempat_lahir_pasangan: { type: Date, require: true },
     id_bpjs: { type: String, require: true, default: null },
     nik: { type: String, require: true, default: null },

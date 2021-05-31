@@ -32,7 +32,7 @@ exports.request_data_dosen = (req, res, next) => {
                         let today = new Date();
                         let new_notif = new notification({
                             _id: mongoose.Types.ObjectId(),
-                            content: "Satu request data dosen dengan id " + id_dosen + " mengingkan konfirmasi anda",
+                            content: "Satu request data oleh " + nama + "  dengan dosen id " + id_dosen + " mengingkan konfirmasi anda",
                             tanggal_notif: today
                         })
                         new_notif.save()
@@ -60,18 +60,22 @@ exports.request_data_dosen = (req, res, next) => {
                         message: "Opss, you already have request to this data!"
                     })
                 } else {
+                    let idNotif = result._id
                     dataRequest.updateOne({ _id: result._id }, { status: "menunggu", date_expired: date, token: token })
                         .then(result => {
                             let today = new Date();
                             let new_notif = new notification({
                                 _id: mongoose.Types.ObjectId(),
-                                content: "Satu request data dosen dengan id " + id_dosen + " mengingkan konfirmasi anda",
+                                content: "Satu request data oleh " + nama + "  dengan dosen id " + id_dosen + " mengingkan konfirmasi anda",
                                 tanggal_notif: today
                             })
                             new_notif.save()
                                 .then(result => {
-                                    pusher.trigger("my-channel", "req-token", {
-                                        message: "Request Notif"
+                                    pusher.trigger("my-channel", "req-token-update", {
+                                        message: {
+                                            _id: idNotif,
+                                            tanggal_notif: today
+                                        }
                                     });
                                     res.status(200).json({
                                         message: "Success to request!"
@@ -176,7 +180,6 @@ exports.confirm_data_dosen = (req, res, next) => {
         })
 }
 exports.doing_read_notif = (req, res, next) => {
-    console.log(req.body.userId)
     notification.updateOne({ _id: req.body._id }, { $addToSet: { isRead: req.body.userId } })
         .exec()
         .then(result => {
@@ -192,6 +195,7 @@ exports.doing_read_notif = (req, res, next) => {
 }
 exports.get_request = (req, res, next) => {
     dataRequest.find({})
+        .sort({ date_expired: "ASC" })
         .skip(Number(req.params.offset))
         .limit(Number(req.params.limit))
         .populate("dosen", "_id nama_lengkap nip")
@@ -215,7 +219,6 @@ exports.get_request = (req, res, next) => {
 }
 exports.get_all_notif = (req, res, next) => {
     notification.find({ isRead: { $nin: req.params.idUser } })
-        .sort({ tanggal_notif: "DESC" })
         .skip(Number(req.params.offset))
         .exec()
         .then(result => {

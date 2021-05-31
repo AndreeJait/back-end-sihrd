@@ -7,6 +7,7 @@ const dataDiriSchema = mongoose.Schema({
     tanggal_lahir: { type: Date, require },
     agama: { type: String, require },
     alamat: { type: String, require },
+    provinsi: { type: String, require },
     email_pribadi: { type: String, require },
     kode_pos: { type: Number, require },
     no_telepon: { type: String, require },
